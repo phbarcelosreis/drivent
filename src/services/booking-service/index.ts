@@ -10,6 +10,7 @@ async function getBooking(userId: number): Promise<GetBookingExpected> {
 
     const bookingInfo = {
         bookingId: booking.id,
+        hotel: booking.Room.Hotel,
         room: {
             id: booking.Room.id,
             name: booking.Room.name,
@@ -24,8 +25,8 @@ async function getBooking(userId: number): Promise<GetBookingExpected> {
 
 type GetBookingExpected = {
     bookingId: number;
-    room: Omit<Room, "createdAt" | "updatedAt"> 
-    & { booked: number };
+    hotel: Omit<Hotel, "createdAt" | "updatedAt">;
+    room: Omit<Room, "createdAt" | "updatedAt"> & { booked: number };
 }
 
 const bookingService = {
