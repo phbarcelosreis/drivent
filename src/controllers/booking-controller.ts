@@ -42,5 +42,6 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
 }
 
 export {
-    getBooking
+    getBooking,
+    postBooking
 }

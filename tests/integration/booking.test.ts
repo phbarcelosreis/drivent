@@ -94,50 +94,49 @@ describe("GET /booking", () => {
 });
 
 describe("POST /booking", () => {
-    describe("GET /booking", () => {
-        it("should respond with status 401 if no token is given",
-            async () => {
 
-                const response = await server.post("/booking");
+    it("should respond with status 401 if no token is given",
+        async () => {
 
-                expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+            const response = await server.post("/booking");
 
-            });
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
 
-        it("should respond with status 401 if token is invalid",
-            async () => {
-                const token = faker.lorem.word();
+        });
 
-                const response = await server.post("/booking").set("Authorization", `Bearer${token}`);
+    it("should respond with status 401 if token is invalid",
+        async () => {
+            const token = faker.lorem.word();
 
-                expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+            const response = await server.post("/booking").set("Authorization", `Bearer${token}`);
 
-            });
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
 
-        it("should respond with status 401 if there is no session with given token",
-            async () => {
+        });
 
-                const userWithoutSession = await createUser();
-                const token = jwt.sign({ user: userWithoutSession.id }, process.env.JWT_SECRET);
+    it("should respond with status 401 if there is no session with given token",
+        async () => {
 
-                const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
+            const userWithoutSession = await createUser();
+            const token = jwt.sign({ user: userWithoutSession.id }, process.env.JWT_SECRET);
 
-                expect(response.status).toBe(httpStatus.UNAUTHORIZED);
+            const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
 
-            });
+            expect(response.status).toBe(httpStatus.UNAUTHORIZED);
 
-/*         describe("when token is valid", () => {
-            it("",
-                async () => {
+        });
 
-                    const user = await createUser();
-                    const token = await generateValidToken(user);
-
-                    const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
-
-                    expect(response.status).toBe(httpStatus.NOT_FOUND);
-
-                });
-        }); */
-    });
+    /*         describe("when token is valid", () => {
+                it("",
+                    async () => {
+    
+                        const user = await createUser();
+                        const token = await generateValidToken(user);
+    
+                        const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
+    
+                        expect(response.status).toBe(httpStatus.NOT_FOUND);
+    
+                    });
+            }); */
 });
