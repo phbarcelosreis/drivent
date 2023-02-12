@@ -7,11 +7,10 @@ async function getBooking(req: AuthenticatedRequest, res: Response) {
 
     const { userId } = req;
 
-    console.log(userId);
-
     try {
 
         const booking = await bookingService.getBooking(Number(userId));
+        
         return res.status(httpStatus.OK).send(booking);
 
     } catch (error) {
