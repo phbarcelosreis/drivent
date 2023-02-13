@@ -55,16 +55,16 @@ async function bookingPost({ userId, roomId }: CreateBookingParams): Promise<Pos
         roomId,
         userId,
     });
-    
+
     return {
         bookingId: booking.id
     };
 }
 
 async function roomAvailable(roomId: number) {
-    
+
     const room = await hotelRepository.findRoomById(roomId);
-    
+
     if (!room) throw notFoundError();
 
     const roomUsers = await bookingRepository.findUsersRoom(roomId);
@@ -73,7 +73,7 @@ async function roomAvailable(roomId: number) {
     console.log(roomUsers)
 
     if (room.capacity === roomUsers.length) throw (httpStatus.FORBIDDEN);
-    
+
 }
 
 async function validateUserBookingEligibility(userId: number) {
@@ -97,9 +97,18 @@ async function validateUserBookingEligibility(userId: number) {
     }
 }
 
+export type UpdateBooking = CreateBookingParams & { bookingId: number };
+
+async function putBooking({ userId, roomId, bookingId }: UpdateBooking) {
+
+    
+
+}
+
 const bookingService = {
     getBooking,
-    bookingPost
+    bookingPost,
+    putBooking
 }
 
 export default bookingService;

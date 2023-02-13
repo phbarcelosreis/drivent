@@ -52,13 +52,13 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
 
 async function putBooking(req: AuthenticatedRequest, res: Response) {
 
-  const numberParams = Number(req.params.bookingId);
+  const bookingId = Number(req.params.bookingId);
   const { userId } = req;
   const { roomId } = req.body;
 
   try {
 
-    const updateBooking = await bookingService.putBooking({ userId, roomId, numberParams});
+    const updateBooking = await bookingService.putBooking({ userId, roomId, bookingId});
 
     return res.status(httpStatus.OK).send(updateBooking)
 
