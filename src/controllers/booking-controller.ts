@@ -27,8 +27,6 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
   const { roomId } = req.body as CreateBookingParams;
 
-  console.log(userId)
-
   try {
 
     const createdBooking = await bookingService.bookingPost({ userId, roomId });
@@ -36,8 +34,6 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.OK).send(createdBooking);
 
   } catch (error) {
-
-    console.log(error)
 
     if (error.name === "NotFoundError") {
 
@@ -63,6 +59,14 @@ async function putBooking(req: AuthenticatedRequest, res: Response) {
     return res.status(httpStatus.OK).send(updateBooking)
 
   } catch (error) {
+
+    console.log(error)
+
+    if (error.name === "NotFoundError") {
+
+      return res.sendStatus(httpStatus.NOT_FOUND);
+
+    }
 
     return res.sendStatus(httpStatus.FORBIDDEN)
 

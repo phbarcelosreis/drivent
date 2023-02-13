@@ -101,7 +101,28 @@ export type UpdateBooking = CreateBookingParams & { bookingId: number };
 
 async function putBooking({ userId, roomId, bookingId }: UpdateBooking) {
 
-    
+    const booking = await bookingRepository.findBookingById(bookingId);
+
+    if (!booking) {
+
+        throw notFoundError();
+
+    }
+
+    const bookingUser = await bookingRepository.findBookingByUserId(userId);
+
+    if (!bookingUser || bookingId !== booking.id) throw ticketNotFound();
+
+    const room = await hotelRepository.findRoomById(roomId);
+
+    if (!room) throw notFoundError()
+
+    const newBooking = await bookingRepository.updateBooking({
+        id: bookingId,
+        roomId
+    });
+
+    return { bookingId: newBooking.id };
 
 }
 
