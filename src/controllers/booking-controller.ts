@@ -52,15 +52,19 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
 
 async function putBooking(req: AuthenticatedRequest, res: Response) {
 
-  const { roomId } = req.params;
+  const numberParams = Number(req.params.bookingId);
+  const { userId } = req;
+  const { roomId } = req.body;
 
   try {
 
-    
+    const updateBooking = await bookingService.putBooking({ userId, roomId, numberParams});
+
+    return res.status(httpStatus.OK).send(updateBooking)
 
   } catch (error) {
 
-
+    return res.sendStatus(httpStatus.FORBIDDEN)
 
   }
 
