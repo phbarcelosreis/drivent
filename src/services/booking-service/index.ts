@@ -45,7 +45,9 @@ async function bookingPost({ userId, roomId }: CreateBookingParams): Promise<Pos
 
     const findBooking = await bookingRepository.findBookingByUserId(userId);
 
-    if (!findBooking) throw (httpStatus.FORBIDDEN);
+    console.log(findBooking)
+
+    if (!findBooking) throw notFoundError();
 
     await roomAvailable(roomId)
 
@@ -66,6 +68,9 @@ async function roomAvailable(roomId: number) {
     if (!room) throw notFoundError();
 
     const roomUsers = await bookingRepository.findUsersRoom(roomId);
+
+    console.log(room);
+    console.log(roomUsers)
 
     if (room.capacity === roomUsers.length) throw (httpStatus.FORBIDDEN);
     

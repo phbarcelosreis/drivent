@@ -52,7 +52,17 @@ async function postBooking(req: AuthenticatedRequest, res: Response) {
 
 async function putBooking(req: AuthenticatedRequest, res: Response) {
 
+  const { roomId } = req.params;
 
+  try {
+
+    
+
+  } catch (error) {
+
+
+
+  }
 
 }
 
