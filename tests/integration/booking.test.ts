@@ -1,9 +1,10 @@
 import app, { init } from "@/app";
 import faker from "@faker-js/faker";
+import { TicketStatus } from "@prisma/client";
 import httpStatus from "http-status";
 import * as jwt from "jsonwebtoken";
 import supertest from "supertest";
-import { createUser, createBooking, createHotelWithRooms } from "../factories";
+import { createUser, createBooking, createHotelWithRooms, createEnrollmentWithAddress, createTicket, createTicketTypeHotel } from "../factories";
 import { cleanDb, generateValidToken } from "../helpers";
 
 beforeAll(async () => {
@@ -126,17 +127,31 @@ describe("POST /booking", () => {
 
         });
 
-    /*         describe("when token is valid", () => {
-                it("",
-                    async () => {
-    
-                        const user = await createUser();
-                        const token = await generateValidToken(user);
-    
-                        const response = await server.post("/booking").set("Authorization", `Bearer ${token}`);
-    
-                        expect(response.status).toBe(httpStatus.NOT_FOUND);
-    
-                    });
-            }); */
+    describe("when body is valid", () => {
+        it("should respond with status 403 if user does not have an enrollment", async () => {
+            const token = await generateValidToken();
+
+            const body = { roomId: 1 };
+
+            const response = await server.post("/booking").set("Authorization", `Bearer ${token}`).send(body);
+
+            expect(response.status).toBe(httpStatus.FORBIDDEN);
+        });
+
+    });
+
+    it("should respond with status 403 if ticket does not have a valid ticket type", async () => {
+        
+        const user = await createUser();
+        const token = await generateValidToken(user);
+        const enrollment = await createEnrollmentWithAddress(user);
+        const ticketType = await createTicketTypeHotel(false);
+        await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
+        const body = { roomId: 1 };
+
+        const response = await server.post("/booking").set("Authorization", `Bearer ${token}`).send(body);
+
+        expect(response.status).toBe(httpStatus.FORBIDDEN);
+      });
+
 });
